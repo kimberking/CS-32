@@ -1,0 +1,19 @@
+
+2. It doesnt work because there isnt an operator=. The compiler doesnt know how to compare the two values.
+
+4b. We needed out recursion to break the problem down into smaller bits, this is why we required domain *d in order to access the subdomains. At the same time we needed to edit the labels which is why we needed the string parameter. So in order for us to solve this problem using recursion we needed the 2 parameters. 
+
+5a.
+O(N^3), because of the lines for (int i = 0; i < N; i++), for (int j = 0; j < N; j++), for (int k = 0; k < N; k++). They all run N times so N * N * N = N^3.
+
+5b.
+O(N^3), because at the worst case i will be N. In the best case i =0, which will make the complexity to O(N), however, we are looking for an average case which allows us to  to set i to be N/2. So we get N * N/2 * N = N^3. So the big O of this problem remains the same as 5a.
+
+6a.
+O(N^2), because for the loop runs N times and the get function gets N items so N*N = N^2.
+
+6b. O( N log(N) ), the for loops each have N itmes, the sort has N logN and the while has N. So in total we have 4N+NlogN.
+
+6c. O(N), While loop runs N time and for loop runs N times so the total is 2N which is N.
+
+

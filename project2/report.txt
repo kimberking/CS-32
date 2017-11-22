@@ -1,0 +1,270 @@
+
+Description:
+The doubly-linked list I made is circular. If there is one node in the list then the two pointers point to itself. If there are two nodes in the list then the two pointers both point to the other node and vice versa. If there are three or more nodes in the list then the pointers point to the previous and the next node. The first node has a pointer pointing to the last node and the last node has a pointer pointing to the first node. With three or more nodes you can think (at least I drew out on paper) a picture of a donut with two pointers (pointing in opposite directions) that connect the nodes. If there is nothing in the set then no node will be created and the pointer will be NULL.
+
+Pseudocode:
+
+copy constructor and the operator= (which is very similar):
+
+set the size to the size of the source passed in
+create a pointer for head and have a second on set to null for use later
+make a new node the store the stuff
+adjust points
+if size is 0
+rearrange the pointers
+continue, have the loop run from the top again and skip the if
+set pointers to the new node objects
+if the size is equal to the size minus one (to stop if size is 0)
+arrange the head and tail pointers
+
+insert function:
+
+if it contains the value
+return false
+or else
+make a new node to store the pointers and data
+make a pointer to start from the head
+for loop to count through the set
+if it isnt null and the data is bigger the value
+break
+or else go to the next one
+basically insert and arrange the nodes by size
+if index is zero (special case)
+make the pointers point at itself because i did a circular loop and increase the size by one since there is only one thing
+if the item is the last item
+make mtail the new node object
+
+erase function:
+
+pointer to find function which finds the value
+if find isnt a null pointer
+find the value and delete it
+if it is the head
+set mhead's pointer to its next one
+if it is the tail pointer
+set mtail's pointer to its previous one
+delete one from size
+if the size is zero
+set mhead and mtail to null
+
+function swap:
+
+swap the head pointers
+swap the tail pointers
+swp the sizes
+
+function unite:
+
+make a set and an item
+search through the first set passed in
+use the get function and put the ith element into copy
+insert it into new result
+do the same thing for set two
+which ties together the two
+swap result with the new result
+
+function subtract:
+
+make three objects and set them equal to the passed in items to prevent aliasing
+if size is zero then return 
+if size of the second object is zero then return the first object
+if it isnt either of the case then doesn't object 2 contain the stuff in object one
+if not then put it in object three
+set result equal to object three and return result
+
+
+List of test cases:
+
+void test(){
+
+	Set kimber;
+	assert(kimber.empty()); //check empty
+	assert(kimber.size() == 0); //empty size
+	ItemType k1 = "kimber"; //add stuff to set
+	ItemType k2 = "tristan";
+	ItemType k3 = "curtis";
+	ItemType k4 = "Natalie";
+	ItemType k5 = "Claire";
+	ItemType value;
+
+	assert(kimber.insert(k1)); //insert the above stuff into the set
+	assert(!kimber.empty()); //show that the set is not empty
+	assert(kimber.size() == 1); //test size
+	assert(kimber.insert(k2)); //insert new
+	assert(kimber.size() == 2); //the rest are the same concept as above
+	assert(kimber.insert(k3));
+	assert(kimber.size() == 3);
+	assert(kimber.insert(k4));
+	assert(kimber.size() == 4);
+	assert(!kimber.insert(k1));
+	assert(!kimber.empty());
+	assert(kimber.get(0, value) && (value == k4)); //get the values inserted
+	assert(kimber.get(1, value) && (value == k3));
+	assert(kimber.get(2, value) && (value == k1));
+	assert(kimber.get(3, value) && (value == k2));
+	assert(!kimber.get(-15, value)); //does not equal to those values
+	assert(!kimber.get(10, value));
+
+	assert(kimber.contains(k1)); //show that the stuff inserted is contained in the set
+	assert(kimber.contains(k2));
+	assert(kimber.contains(k3));
+	assert(kimber.contains(k4));
+
+	assert(kimber.erase(k1)); //delete a value from the set
+	assert(kimber.erase(k3));
+	assert(kimber.insert(k5)); //insert a new value into the set
+	assert(kimber.size() == 3);
+	assert(!kimber.contains(k1)); //does not contain the erased value
+	assert(!kimber.contains(k3));
+	assert(kimber.erase(k2));
+	assert(kimber.erase(k4));
+	assert(kimber.erase(k5));
+	assert(kimber.size() == 0); //check if head and tail are pointed to NULL after the set is empty
+
+	assert(kimber.insert(k1)); //test insert
+	assert(kimber.insert(k2));
+	assert(kimber.insert(k3));
+
+	Set Natalie(kimber); //test a set into another set, copy constructor
+	assert(Natalie.get(0, value) && (value == "curtis")); //get the values which should be the same as above
+	assert(Natalie.get(1, value) && (value == "kimber"));
+	assert(Natalie.get(2, value) && (value == "tristan"));
+	assert(Natalie.erase(k1));
+	assert(Natalie.get(1, value) && (value == "tristan"));
+	assert(Natalie.size() == 2);
+	assert(kimber.insert(k5)); //insert a new value into the old set to test in swap
+
+	kimber.swap(Natalie); //test swap
+	assert(kimber.get(0, value) && (value == "curtis")); //test swapped values, same as above
+	assert(kimber.get(1, value) && (value == "tristan"));
+	assert(kimber.size() == 2); //test size of swaps
+	assert(Natalie.size() == 4); //same
+
+	assert(Natalie.get(0, value) && (value == "Claire")); //get the values of the swap
+	assert(Natalie.get(1, value) && (value == "curtis"));
+	assert(Natalie.get(2, value) && (value == "kimber"));
+	assert(Natalie.get(3, value) && (value == "tristan"));
+	assert(Natalie.insert(k4)); //test insert
+	assert(Natalie.size() == 5); //test swap
+
+	Set Erik; //test operator=
+	Erik = kimber;
+	assert(Erik.get(0, value) && (value == "curtis"));  //test if values are copied correcetly
+	assert(Erik.get(1, value) && (value == "tristan"));
+	assert(Erik.insert(k5)); //insert in the new set
+	assert(Erik.get(0, value) && (value == "Claire"));
+	assert(Erik.get(2, value) && (value == "tristan"));
+	assert(Erik.size() == 3); //check size
+
+	Erik = Erik; //test alias
+	assert(Erik.get(0, value) && (value == k5)); //get values from the set
+	assert(Erik.get(1, value) && (value == k3));
+	assert(Erik.get(2, value) && (value == k2));
+	assert(Erik.insert(k4)); //insert a value into the set
+	assert(Erik.get(0, value) && (value == k5)); //get values from the set
+	assert(Erik.get(1, value) && (value == k4));
+	assert(Erik.get(2, value) && (value == k3));
+	assert(Erik.get(3, value) && (value == k2));
+	assert(Erik.size() == 4); //test size of new set after insert
+
+	Set Joyce;
+	ItemType j1 = "kimber"; //add stuff to set
+	ItemType j2 = "tristan";
+	ItemType j3 = "Apple";
+	assert(Joyce.insert(j1)); //insert into new set
+	assert(Joyce.insert(j2));
+	assert(Joyce.insert(j3));
+
+	Set Rachel; //new set
+	ItemType r1 = "kimber"; //add stuff to set
+	ItemType r2 = "tristan";
+	ItemType r3 = "Coitus";
+	ItemType r4 = "Noob";
+	ItemType r5 = "League";
+	ItemType r6 = "zed";
+	ItemType r7 = "ved";
+	assert(Rachel.insert(r1)); //insert items into the set
+	assert(Rachel.insert(r2));
+	assert(Rachel.insert(r3));
+	assert(Rachel.insert(r4));
+	assert(Rachel.insert(r5));
+
+	Set result;
+	//test unite
+	unite(Rachel, Joyce, result); //unite the two sets above
+	assert(result.size() == 6); //test size
+	assert(result.get(0, value) && (value == j3)); //test the values in the set
+	assert(result.get(1, value) && (value == r3));
+	assert(result.get(2, value) && (value == r5));
+	assert(result.get(3, value) && (value == r4));
+	assert(result.get(4, value) && (value == j1));
+	assert(result.get(5, value) && (value == j2));
+	assert(result.insert(r6)); //test insert in the set
+	assert(result.get(6, value) && (value == r6)); //test value after insert
+	assert(result.size() == 7); //test size
+	assert(result.insert(r7)); //test insert
+	assert(result.get(7, value) && (value == r6)); //test value
+	assert(result.size() == 8); //test size
+	assert(result.get(6, value) && (value == r7)); //test value
+
+	//test unite alias
+	unite(result, result, result); //unite two of the same sets
+	assert(result.size() == 8); //test size
+	assert(result.get(0, value) && (value == j3)); //test values in it, should be the same as above
+	assert(result.get(1, value) && (value == r3));
+	assert(result.get(2, value) && (value == r5));
+	assert(result.get(3, value) && (value == r4));
+	assert(result.get(4, value) && (value == j1));
+	assert(result.get(5, value) && (value == j2));
+	assert(result.get(6, value) && (value == r7));
+	assert(result.get(7, value) && (value == r6));
+
+	Set friedchicken; //make new set
+	ItemType f1 = "A";
+	ItemType f2 = "B";
+	ItemType f3 = "C";
+	assert(friedchicken.insert(f1)); //put things in the set
+	assert(friedchicken.insert(f2));
+	assert(friedchicken.insert(f3));
+
+	Set koolaid; //make new set
+	ItemType kk1 = "A";
+	ItemType kk2 = "B";
+	ItemType kk3 = "D";
+	ItemType kk4 = "E";
+	assert(koolaid.insert(kk1)); //put things in the set
+	assert(koolaid.insert(kk2));
+	assert(koolaid.insert(kk3));
+	assert(koolaid.insert(kk4));
+
+	Set dumb;
+	//test subtract
+	subtract(friedchicken, koolaid, dumb); //subtract the two sets from above
+	assert(dumb.size() == 1); //test size
+	assert(dumb.get(0, value) && (value == f3)); //test value
+
+	Set smart;
+	//test subtract aliasing
+	subtract(friedchicken, friedchicken, smart); //subtract from each other
+	assert(smart.size() == 0); //test size
+	assert(smart.empty()); //test empty
+	assert(smart.insert(k1)); //insert values into the empty set
+	assert(smart.insert(k2));
+	assert(smart.insert(k3));
+	assert(smart.insert(k4));
+	assert(smart.insert(k5));
+	assert(smart.get(0, value) && (value == k5)); //get the values in the new set
+	assert(smart.get(1, value) && (value == k4));
+	assert(smart.get(2, value) && (value == k3));
+	assert(smart.get(3, value) && (value == k1));
+	assert(smart.erase(k3)); //delete a value
+	assert(smart.size() == 4); //test new size
+	assert(smart.get(2, value) && (value == k1)); //get a value after deleting an object
+
+}
+
+int main()
+{
+	test();
+	cout << "Passed all tests" << endl; 
+}

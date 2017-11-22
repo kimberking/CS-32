@@ -1,0 +1,37 @@
+
+2. first 12 (r,c) coordinates popped off the stack by the algorithm are
+//row col, the format i am using
+
+6 4
+6 3
+6 5
+7 5
+8 5
+8 6
+8 7
+8 8
+7 8
+6 6
+5 4
+4 4
+
+4. first 12 (r,c) coordinates popped off the queue by the algorithm are
+//row col, the format i am using
+
+6 4
+5 4 
+6 5
+6 3
+4 4
+6 6
+7 5
+3 4
+4 5
+8 5
+2 4
+4 6
+
+Stacks use depth first search. It is like going up a tree and when it hit a branch that doesn't work it cut it off and try another one. So once it fails it goes back to the previous junction and repeat the process. (west south east west)
+
+
+Queues use breadth first search which is like an ocean flowing into streams. It checks all the possibilities all at once. It searches north east south west, pushing in a clockwise  direction. Searches everything instead of one at a time. 
